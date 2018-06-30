@@ -6,8 +6,8 @@ def load(job_records_path):
     with open(job_records_path,'rb') as f:
         return _pickle.load(f)
 
-def save(now_idx, jobs, selected, job_records_name):
-    with open(job_records_name,'wb') as f:
+def save(now_idx, jobs, selected, job_records_path):
+    with open(job_records_path,'wb') as f:
         _pickle.dump((now_idx,jobs,selected),f)
 
 
@@ -59,8 +59,8 @@ def look_and_decide(window_title,image,monitor_h):
             return chr(key)
 
 def select(max_selection, monitor_height,
-           data_path, job_records_name=None):
-    if job_records_name:
+           data_path, job_records_path=None):
+    if job_records_path:
         now_idx, jobs, selected = new_job_records(data_path)
     else:
         now_idx, jobs, selected = load(data_path)
@@ -80,8 +80,8 @@ def select(max_selection, monitor_height,
                 break
         now_idx += 1
 
-        if job_records_name:
-            save(now_idx,jobs,selected, job_records_name)
+        if job_records_path:
+            save(now_idx,jobs,selected, job_records_path)
         else:
             save(now_idx,jobs,selected, data_path)
 
