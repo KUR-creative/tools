@@ -47,7 +47,41 @@ def dirname_filepaths_arr(rootpath, cache=False):
     pipe(cmap(lambda filename: os.path.join(rootpath,filename)),
          cmap(utils.file_paths),
          cmap(list))
-    return 0, list(zip(dirnames, filepaths(dirnames)))
+    return 0, list(zip(dirnames, filepaths(dirnames))), []
+
+def look_and_decide(window_title,image,monitor_h):
+    ''' 
+    o: save this image
+    x: nope
+    j: if height of image > height of monitor, press j to 
+       look lower part of image. and the press o or x.
+    '''
+
+    img_h = img.shape[0]
+    top = True
+    checked = (img_h < monitor_h)
+    while True:
+        if top:
+            cv2.imshow(window_title,img[:monitor_h]);
+        else:
+            cv2.imshow(window_title,img[img_h - monitor_h:]);
+
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord('j') and img_h > monitor_h:
+            top = not top
+            checked = True
+        if key == ord('o') or key == ord('x') and checked:
+            return chr(key)
+
+now_idx, jobs, selected = dirname_filepaths_arr('tmp_data',
+                                                cache=True)
+for title, imgpaths in jobs:
+    print(title)
+    random.shuffle(imgpaths)
+    for imgpath in imgpaths:
+        img = cv2.imread(imgpath); 
+        if img is not None:
+            print(look_and_decide('o x j',img,980))
 
 
 import unittest
