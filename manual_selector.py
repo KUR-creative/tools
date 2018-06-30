@@ -2,25 +2,6 @@ import os, random, _pickle, cv2
 from fp import pipe, curry, cmap, cfilter, crepeat
 import utils
 
-#li = list(utils.file_paths('./data/'))
-#print(li)
-
-'''
-titles_path = 'data'
-for title in os.listdir(titles_path):
-    paths = list(utils.file_paths(os.path.join(titles_path,
-                                               title)))
-    random.shuffle(paths)
-    for path in paths:
-        img = cv2.imread(path); 
-        print(img.shape)
-        cv2.imshow('img',img[:980]);
-        cv2.waitKey(0)
-'''
-
-# opt1. just N imgs from 1 title
-# opt2. all editable imgs
-
 def load(job_records_path):
     with open(job_records_path,'rb') as f:
         return _pickle.load(f)
@@ -32,20 +13,19 @@ def save(now_idx, jobs, selected, job_records_name):
 
 def new_job_records(rootpath):
     ''' 
-    rootpath is 
-      cached pickle file name (cache=True) or
-      root of directory structure like below
-        rootpath
-          dirname1 
-            filepath1 
-            filepath2 
-            ...
-          dirname2 
-            filepath1
-          ...
+    rootpath is root of directory structure like below
+    rootpath
+      dirname1 
+        filepath1 
+        filepath2 
+        ...
+      dirname2 
+        filepath1
+      ...
 
-    return (now_index,list<dirname,list<filepath>>)
+    return (now_index, list<dirname,list<filepath>>, selected)
     now_index is last worked index.
+    selected is empty list. img paths would be saved.
     '''
 
     dirnames = os.listdir(rootpath)
@@ -78,10 +58,6 @@ def look_and_decide(window_title,image,monitor_h):
         if (key == ord('o') or key == ord('x')) and checked:
             return chr(key)
 
-#now_idx, jobs, selected = new_job_records('./data/')
-#_, _, selected = new_job_records('tmp_data2',cache=True)
-#print(selected)
-
 def select(max_selection, monitor_height,
            data_path, job_records_name=None):
     if job_records_name:
@@ -109,25 +85,9 @@ def select(max_selection, monitor_height,
         else:
             save(now_idx,jobs,selected, data_path)
 
-select(4,980, './data/','tmp_data2')
-select(4,980, 'tmp_data2')
-_, _, selected = load('tmp_data2')
-print(selected)
-
-
-'''
-data = new_job_records('./data/')
-with open('tmp_data','wb') as f:
-    _pickle.dump(data,f)
-import unittest
-class Test_cache(unittest.TestCase):
-    def test_cache(self):
-        expected = new_job_records('data')
-        with open('tmp_data','wb') as f:
-            _pickle.dump(expected,f)
-        actual = new_job_records('tmp_data',cache=True)
-        self.assertEqual(expected, actual)
 
 if __name__ == '__main__':
-    unittest.main()
-'''
+    select(4,980, './data/','tmp_data2')
+    select(4,980, 'tmp_data2')
+    _, _, selected = load('tmp_data2')
+    print(selected)
