@@ -21,7 +21,7 @@ for title in os.listdir(titles_path):
 # opt1. just N imgs from 1 title
 # opt2. all editable imgs
 
-def dirname_filepaths_arr(rootpath, cache=False):
+def job_records(rootpath, cache=False):
     ''' 
     rootpath is 
       cached pickle file name (cache=True) or
@@ -72,11 +72,10 @@ def look_and_decide(window_title,image,monitor_h):
         if (key == ord('o') or key == ord('x')) and checked:
             return chr(key)
 
-_, _, arr = dirname_filepaths_arr('tmp_data',cache=True)
+_, _, arr = job_records('tmp_data',cache=True)
 print(arr)
 
-now_idx, jobs, selected = dirname_filepaths_arr('tmp_data',
-                                                cache=True)
+now_idx, jobs, selected = job_records('tmp_data', cache=True)
 MAX_NUM_SELECTION = 2
 for title, imgpaths in jobs[now_idx:]:
     print(title)
@@ -96,7 +95,7 @@ for title, imgpaths in jobs[now_idx:]:
 
     with open('tmp_data','wb') as f:
         _pickle.dump( (now_idx,jobs,selected),f )
-    _, _, arr = dirname_filepaths_arr('tmp_data',cache=True)
+    _, _, arr = job_records('tmp_data',cache=True)
     print(arr)
 
     #now_idx += 1
@@ -104,16 +103,16 @@ for title, imgpaths in jobs[now_idx:]:
 
 
 '''
-data = dirname_filepaths_arr('./data/')
+data = job_records('./data/')
 with open('tmp_data','wb') as f:
     _pickle.dump(data,f)
 import unittest
 class Test_cache(unittest.TestCase):
     def test_cache(self):
-        expected = dirname_filepaths_arr('data')
+        expected = job_records('data')
         with open('tmp_data','wb') as f:
             _pickle.dump(expected,f)
-        actual = dirname_filepaths_arr('tmp_data',cache=True)
+        actual = job_records('tmp_data',cache=True)
         self.assertEqual(expected, actual)
 
 if __name__ == '__main__':
