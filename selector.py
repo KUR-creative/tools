@@ -1,6 +1,6 @@
-import os, random, cv2
-import utils
+import os, random, _pickle, cv2
 from fp import pipe, curry, cmap, cfilter, crepeat
+import utils
 
 #li = list(utils.file_paths('./data/'))
 #print(li)
@@ -23,45 +23,41 @@ for title in os.listdir(titles_path):
 
 def dirname_filepaths_arr(rootpath, cache=False):
     ''' 
-    return <dirname,<filepath>arr>arr 
+    rootpath is 
+      cached pickle file name (cache=True) or
+      root of directory structure like below
+        rootpath
+          dirname1 
+            filepath1 
+            filepath2 
+            ...
+          dirname2 
+            filepath1
+          ...
 
-    rootpath directory structure:
-    rootpath
-      dirname1 
-        filepath1 
-        filepath2 
-        filepath3
-      dirname2 
-        filepath1
-        ...
-      dirname3 
-        filepath1 
-        filepath2
-      ...
+    return (now_index,list<dirname,list<filepath>>)
+    now_index is last worked index.
     '''
+    if cache:
+        with open(rootpath,'rb') as f:
+            return _pickle.load(f)
+
     dirnames = os.listdir(rootpath)
     filepaths = \
     pipe(cmap(lambda filename: os.path.join(rootpath,filename)),
          cmap(utils.file_paths),
          cmap(list))
-    return zip(dirnames, filepaths(dirnames))
-    
-         
+    return 0, list(zip(dirnames, filepaths(dirnames)))
 
 
 import unittest
 class Test_cache(unittest.TestCase):
     def test_cache(self):
-        self.assertEqual(list(dirname_filepaths_arr('data')),
-                         list(dir)
-        '''
-        for dirname,filepath in dirname_filepaths_arr('data'):
-            print(dirname)
-            print(filepath)
-        '''
-
-
-
+        expected = dirname_filepaths_arr('data')
+        with open('tmp_data','wb') as f:
+            _pickle.dump(expected,f)
+        actual = dirname_filepaths_arr('tmp_data',cache=True)
+        self.assertEqual(expected, actual)
 
 if __name__ == '__main__':
     unittest.main()
