@@ -75,26 +75,22 @@ def look_and_decide(window_title,image,monitor_h):
 _, _, arr = dirname_filepaths_arr('tmp_data',cache=True)
 print(arr)
 
-'''
-data = dirname_filepaths_arr('./data/')
-with open('tmp_data','wb') as f:
-    _pickle.dump(data,f)
-'''
 now_idx, jobs, selected = dirname_filepaths_arr('tmp_data',
                                                 cache=True)
-def path2id(path):
-    return path.replace('/','_')
-
-NUM_SELECTION = 2
+MAX_NUM_SELECTION = 2
 for title, imgpaths in jobs[now_idx:]:
     print(title)
     random.shuffle(imgpaths)
+    num_selection = 0
     for imgpath in imgpaths:
         img = cv2.imread(imgpath); 
         if img is not None:
             if 'o' == look_and_decide('o x j',img,980):
-                selected.append( (imgpath,path2id(imgpath)) )
-        if len(selected) == NUM_SELECTION:
+                selected.append(
+                    (imgpath, imgpath.replace('/','_'))
+                )
+                num_selection += 1
+        if num_selection == MAX_NUM_SELECTION:
             break
     now_idx += 1
 
@@ -107,6 +103,10 @@ for title, imgpaths in jobs[now_idx:]:
 
 
 
+'''
+data = dirname_filepaths_arr('./data/')
+with open('tmp_data','wb') as f:
+    _pickle.dump(data,f)
 import unittest
 class Test_cache(unittest.TestCase):
     def test_cache(self):
@@ -118,3 +118,4 @@ class Test_cache(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+'''
