@@ -70,7 +70,7 @@ def look_and_decide(window_title,image,monitor_h):
         if key == ord('j') and img_h > monitor_h:
             top = not top
             checked = True
-        if key == ord('o') or key == ord('x') and checked:
+        if (key == ord('o') or key == ord('x')) and checked:
             return chr(key)
 
 _, _, arr = dirname_filepaths_arr('tmp_data',cache=True)
