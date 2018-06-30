@@ -21,6 +21,15 @@ for title in os.listdir(titles_path):
 # opt1. just N imgs from 1 title
 # opt2. all editable imgs
 
+def load(job_records_path):
+    with open(job_records_path,'rb') as f:
+        return _pickle.load(f)
+
+def save(now_idx, jobs, selected, job_records_name):
+    with open(job_records_name,'wb') as f:
+        _pickle.dump((now_idx,jobs,selected),f)
+
+
 def job_records(rootpath, cache=False):
     ''' 
     rootpath is 
@@ -39,8 +48,7 @@ def job_records(rootpath, cache=False):
     now_index is last worked index.
     '''
     if cache:
-        with open(rootpath,'rb') as f:
-            return _pickle.load(f)
+        return load(rootpath)
 
     dirnames = os.listdir(rootpath)
     filepaths = \
@@ -72,10 +80,12 @@ def look_and_decide(window_title,image,monitor_h):
         if (key == ord('o') or key == ord('x')) and checked:
             return chr(key)
 
-_, _, arr = job_records('tmp_data',cache=True)
-print(arr)
+#now_idx, jobs, selected = job_records('./data/')
+#_, _, selected = job_records('tmp_data2',cache=True)
+#print(selected)
 
 now_idx, jobs, selected = job_records('tmp_data', cache=True)
+print(selected)
 MAX_NUM_SELECTION = 2
 for title, imgpaths in jobs[now_idx:]:
     print(title)
@@ -93,8 +103,7 @@ for title, imgpaths in jobs[now_idx:]:
             break
     now_idx += 1
 
-    with open('tmp_data','wb') as f:
-        _pickle.dump( (now_idx,jobs,selected),f )
+    save(now_idx,jobs,selected,'tmp_data')
     _, _, arr = job_records('tmp_data',cache=True)
     print(arr)
 
