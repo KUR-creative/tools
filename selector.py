@@ -73,15 +73,35 @@ def look_and_decide(window_title,image,monitor_h):
         if key == ord('o') or key == ord('x') and checked:
             return chr(key)
 
+'''
+'''
+_, _, arr = dirname_filepaths_arr('tmp_data',cache=True)
+print(arr)
+
+data = dirname_filepaths_arr('./data/')
+with open('tmp_data','wb') as f:
+    _pickle.dump(data,f)
 now_idx, jobs, selected = dirname_filepaths_arr('tmp_data',
                                                 cache=True)
+def path2id(path):
+    return path.replace('/','_')
+
 for title, imgpaths in jobs:
     print(title)
     random.shuffle(imgpaths)
     for imgpath in imgpaths:
         img = cv2.imread(imgpath); 
         if img is not None:
-            print(look_and_decide('o x j',img,980))
+            if 'o' == look_and_decide('o x j',img,980):
+                selected.append( (imgpath,path2id(imgpath)) )
+
+    with open('tmp_data','wb') as f:
+        _pickle.dump( (now_idx,jobs,selected),f )
+    _, _, arr = dirname_filepaths_arr('tmp_data',cache=True)
+    print(arr)
+
+    #now_idx += 1
+
 
 
 import unittest
