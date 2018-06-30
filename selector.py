@@ -61,10 +61,9 @@ def look_and_decide(window_title,image,monitor_h):
     top = True
     checked = (img_h < monitor_h)
     while True:
-        if top:
-            cv2.imshow(window_title,img[:monitor_h]);
-        else:
-            cv2.imshow(window_title,img[img_h - monitor_h:]);
+        cv2.imshow(window_title,
+                   img[:monitor_h] if top 
+                   else img[img_h - monitor_h:]);
 
         key = cv2.waitKey(1) & 0xFF
         if key == ord('j') and img_h > monitor_h:
@@ -86,6 +85,7 @@ now_idx, jobs, selected = dirname_filepaths_arr('tmp_data',
 def path2id(path):
     return path.replace('/','_')
 
+NUM_SELECTION = 2
 for title, imgpaths in jobs[now_idx:]:
     print(title)
     random.shuffle(imgpaths)
@@ -94,6 +94,8 @@ for title, imgpaths in jobs[now_idx:]:
         if img is not None:
             if 'o' == look_and_decide('o x j',img,980):
                 selected.append( (imgpath,path2id(imgpath)) )
+        if len(selected) == NUM_SELECTION:
+            break
     now_idx += 1
 
     with open('tmp_data','wb') as f:
