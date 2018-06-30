@@ -30,7 +30,7 @@ def save(now_idx, jobs, selected, job_records_name):
         _pickle.dump((now_idx,jobs,selected),f)
 
 
-def job_records(rootpath, cache=False):
+def new_job_records(rootpath):
     ''' 
     rootpath is 
       cached pickle file name (cache=True) or
@@ -47,8 +47,6 @@ def job_records(rootpath, cache=False):
     return (now_index,list<dirname,list<filepath>>)
     now_index is last worked index.
     '''
-    if cache:
-        return load(rootpath)
 
     dirnames = os.listdir(rootpath)
     filepaths = \
@@ -65,13 +63,13 @@ def look_and_decide(window_title,image,monitor_h):
        look lower part of image. and the press o or x.
     '''
 
-    img_h = img.shape[0]
+    img_h = image.shape[0]
     top = True
     checked = (img_h < monitor_h)
     while True:
         cv2.imshow(window_title,
-                   img[:monitor_h] if top 
-                   else img[img_h - monitor_h:]);
+                   image[:monitor_h] if top 
+                   else image[img_h - monitor_h:]);
 
         key = cv2.waitKey(1) & 0xFF
         if key == ord('j') and img_h > monitor_h:
@@ -80,14 +78,16 @@ def look_and_decide(window_title,image,monitor_h):
         if (key == ord('o') or key == ord('x')) and checked:
             return chr(key)
 
-#now_idx, jobs, selected = job_records('./data/')
-#_, _, selected = job_records('tmp_data2',cache=True)
+#now_idx, jobs, selected = new_job_records('./data/')
+#_, _, selected = new_job_records('tmp_data2',cache=True)
 #print(selected)
 
-def select(data_path, max_selection, monitor_height, cache=False):
-    now_idx, jobs, selected = job_records(data_path, cache=True)
-    print(selected)
-    #max_selection = 2
+def select(max_selection, monitor_height,
+           data_path, job_records_name=None):
+    if job_records_name:
+        now_idx, jobs, selected = new_job_records(data_path)
+    else:
+        now_idx, jobs, selected = load(data_path)
     for title, imgpaths in jobs[now_idx:]:
         print(title)
         random.shuffle(imgpaths)
@@ -104,26 +104,28 @@ def select(data_path, max_selection, monitor_height, cache=False):
                 break
         now_idx += 1
 
-        save(now_idx,jobs,selected, data_path)
-        #_, _, arr = job_records(data_path,cache=True);print(arr)
+        if job_records_name:
+            save(now_idx,jobs,selected, job_records_name)
+        else:
+            save(now_idx,jobs,selected, data_path)
 
-#select('./data/', 4, 980)
-select('tmp_data', 4, 980, cache=True)
-_, _, selected = job_records('tmp_data', cache=True)
+select(4,980, './data/','tmp_data2')
+select(4,980, 'tmp_data2')
+_, _, selected = load('tmp_data2')
 print(selected)
 
 
 '''
-data = job_records('./data/')
+data = new_job_records('./data/')
 with open('tmp_data','wb') as f:
     _pickle.dump(data,f)
 import unittest
 class Test_cache(unittest.TestCase):
     def test_cache(self):
-        expected = job_records('data')
+        expected = new_job_records('data')
         with open('tmp_data','wb') as f:
             _pickle.dump(expected,f)
-        actual = job_records('tmp_data',cache=True)
+        actual = new_job_records('tmp_data',cache=True)
         self.assertEqual(expected, actual)
 
 if __name__ == '__main__':
