@@ -84,31 +84,33 @@ def look_and_decide(window_title,image,monitor_h):
 #_, _, selected = job_records('tmp_data2',cache=True)
 #print(selected)
 
-now_idx, jobs, selected = job_records('tmp_data', cache=True)
+def select(data_path, max_selection, monitor_height, cache=False):
+    now_idx, jobs, selected = job_records(data_path, cache=True)
+    print(selected)
+    #max_selection = 2
+    for title, imgpaths in jobs[now_idx:]:
+        print(title)
+        random.shuffle(imgpaths)
+        num_selection = 0
+        for imgpath in imgpaths:
+            img = cv2.imread(imgpath); 
+            if img is not None:
+                if 'o' == look_and_decide('o x j',img,980):
+                    selected.append(
+                        (imgpath, imgpath.replace('/','_'))
+                    )
+                    num_selection += 1
+            if num_selection == max_selection:
+                break
+        now_idx += 1
+
+        save(now_idx,jobs,selected, data_path)
+        #_, _, arr = job_records(data_path,cache=True);print(arr)
+
+#select('./data/', 4, 980)
+select('tmp_data', 4, 980, cache=True)
+_, _, selected = job_records('tmp_data', cache=True)
 print(selected)
-MAX_NUM_SELECTION = 2
-for title, imgpaths in jobs[now_idx:]:
-    print(title)
-    random.shuffle(imgpaths)
-    num_selection = 0
-    for imgpath in imgpaths:
-        img = cv2.imread(imgpath); 
-        if img is not None:
-            if 'o' == look_and_decide('o x j',img,980):
-                selected.append(
-                    (imgpath, imgpath.replace('/','_'))
-                )
-                num_selection += 1
-        if num_selection == MAX_NUM_SELECTION:
-            break
-    now_idx += 1
-
-    save(now_idx,jobs,selected,'tmp_data')
-    _, _, arr = job_records('tmp_data',cache=True)
-    print(arr)
-
-    #now_idx += 1
-
 
 
 '''
