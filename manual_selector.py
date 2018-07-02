@@ -1,5 +1,5 @@
 import os, random, _pickle, cv2
-from fp import pipe, curry, cmap, cfilter, crepeat
+#from fp import pipe, curry, cmap, cfilter, crepeat
 import utils
 
 utils.help_option(
