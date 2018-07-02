@@ -10,15 +10,15 @@ manual_selector:
     'monitor_height' is maximum height size of ui
 
 if you create new job_records
-  python manual_selector N imgs_dir imgs_dir job_records_path
+  python manual_selector N monitor_height imgs_dir job_records_path
 
 if you use existing job_records
-  python manual_selector N imgs_dir job_records_path
+  python manual_selector N monitor_height job_records_path
 
 ex1. create new records)    
-python manual_selector 2 ./mangas/ job_records.bin
+python manual_selector 2 980 ./mangas/ job_records.bin
 ex2. use existing records)  
-python manual_selector 2 job_records.bin 
+python manual_selector 2 980 job_records.bin 
 '''
 )
 
