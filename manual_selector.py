@@ -96,7 +96,7 @@ def select(max_selection, monitor_height,
             if img is not None:
                 if 'o' == look_and_decide('o x j',img,980):
                     selected.append(
-                        (imgpath, imgpath.replace('/','_'))
+                        (imgpath, imgpath.replace(os.sep,'_'))
                     )
                     num_selection += 1
             if num_selection == max_selection:
