@@ -19,6 +19,9 @@ def look_and_decide(image, window_title='o x 4 6 q'):
             key == ord('q')):  # exit
             return chr(key)
 
+def mod_add(augend,addend, mod_n):
+    return ((augend + addend) + mod_n) % mod_n
+
 def print_state(ox_list, idx, num_checked, num_imgs):
     print(ox_list[idx], ', idx:', idx,'/',num_imgs, ', checked:', 
           num_checked,'/',num_imgs)
@@ -40,13 +43,13 @@ def classify(src_imgs_path, ox_list_path):
                 ox_list[idx] = cmd
                 print_state(ox_list, idx, num_checked, num_imgs)
                 num_checked += 1
-                idx += 1
+                idx = mod_add(idx,+1, num_imgs)
                 save(idx, num_checked, ox_list, ox_list_path)
             elif cmd == '4':
-                idx = ((idx - 1) + num_imgs) % num_imgs
+                idx = mod_add(idx,-1, num_imgs)
                 print_state(ox_list, idx, num_checked, num_imgs)
             elif cmd == '6':
-                idx = ((idx + 1) + num_imgs) % num_imgs
+                idx = mod_add(idx,+1, num_imgs)
                 print_state(ox_list, idx, num_checked, num_imgs)
         look_and_decide(images[-1])
 
