@@ -25,39 +25,44 @@ def mod_add(augend,addend, mod_n):
 def print_state(ox_list, idx, num_checked, num_imgs):
     print(ox_list[idx], ', idx:', idx,'/',num_imgs, ', checked:', 
           num_checked,'/',num_imgs)
+
+def build_ox_list(images, ox_list_path,
+                  idx, num_checked, ox_list=None):
+    num_imgs = images.shape[0]
+    if ox_list is None:
+        ox_list = ['-'] * num_imgs
+    while True:
+        cmd = look_and_decide(images[idx])
+        if cmd == 'o' or cmd == 'x':
+            if num_checked < num_imgs:
+                num_checked += 1
+            else:
+                print('It overwirte previous data!!!') 
+            ox_list[idx] = cmd
+            print_state(ox_list, idx, num_checked, num_imgs)
+            idx = mod_add(idx,+1, num_imgs)
+            save(idx, num_checked, ox_list, ox_list_path)
+        elif cmd == '4':
+            idx = mod_add(idx,-1, num_imgs)
+            print_state(ox_list, idx, num_checked, num_imgs)
+        elif cmd == '6':
+            idx = mod_add(idx,+1, num_imgs)
+            print_state(ox_list, idx, num_checked, num_imgs)
+        elif cmd == 'q':
+            if num_checked < num_imgs:
+                print('You have to check {} more images.'\
+                      .format(num_imgs - num_checked))
+            sys.exit(0)
+
 def classify(src_imgs_path, ox_list_path):
     # load
     # look_and_decide
     with h5py.File(src_imgs_path,'r') as f:
-        images = f['images']
-        num_imgs = images.shape[0]
         if os.path.exists(ox_list_path):
-            idx,num_checked,ox_list = load(ox_list_path)
+            build_ox_list(f['images'], ox_list_path, 
+                          *load(ox_list_path))
         else:
-            idx = 0
-            num_checked = 0
-            ox_list = ['-'] * num_imgs
-        while True:
-            cmd = look_and_decide(images[idx])
-            if cmd == 'o' or cmd == 'x':
-                if num_checked < num_imgs:
-                    num_checked += 1
-                else:
-                    print('It overwirte previous data!!!') 
-                ox_list[idx] = cmd
-                print_state(ox_list, idx, num_checked, num_imgs)
-                idx = mod_add(idx,+1, num_imgs)
-                save(idx, num_checked, ox_list, ox_list_path)
-            elif cmd == '4':
-                idx = mod_add(idx,-1, num_imgs)
-                print_state(ox_list, idx, num_checked, num_imgs)
-            elif cmd == '6':
-                idx = mod_add(idx,+1, num_imgs)
-                print_state(ox_list, idx, num_checked, num_imgs)
-            elif cmd == 'q':
-                if num_checked < num_imgs:
-                    print('You have to check %d more images.' % num_imgs - num_checked)
-                sys.exit(0)
+            build_ox_list(f['images'], ox_list_path, 0, 0)
 
 #import unittest, numpy as np
 #class Test(unittest.TestCase):
