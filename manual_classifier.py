@@ -34,7 +34,7 @@ def build_ox_list(images, ox_list_path,
     while True:
         cmd = look_and_decide(images[idx])
         if cmd == 'o' or cmd == 'x':
-            if num_checked < num_imgs:
+            if num_checked < num_imgs and ox_list[idx] == '-':
                 num_checked += 1
             else:
                 print('It overwirte previous data!!!') 
