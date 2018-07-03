@@ -16,6 +16,7 @@ def look_and_decide(image, window_title='o x 4 6 q'):
             key == ord('x') or # bad crop
             key == ord('6') or # next
             key == ord('4') or # prev
+            key == ord('l') or # prev
             key == ord('q')):  # exit
             return chr(key)
 
@@ -49,6 +50,10 @@ def build_ox_list(images, ox_list_path,
         elif cmd == '6':
             idx = mod_add(idx,+1, num_imgs)
             print_state(ox_list, idx, num_checked, num_imgs)
+        elif cmd == 'l':
+            for i, ch in enumerate(ox_list):
+                print(i,ch,end='\t',flush=True)
+            print()
         elif cmd == 'q':
             if num_checked < num_imgs:
                 print('You have to check {} more images.'\
