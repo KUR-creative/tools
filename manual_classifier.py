@@ -22,16 +22,15 @@ def look_and_decide(image, window_title='o x 4 6 q'):
 def print_state(ox_list, idx, num_checked, num_imgs):
     print(ox_list[idx], ':', idx,'/',num_imgs, ' | ', 
           num_checked,'/',num_imgs)
-def main():
+def classify(src_imgs_path, ox_list_path):
     # load
     # look_and_decide
-    with h5py.File('./mini_mini.h5','r') as f:
+    with h5py.File(src_imgs_path,'r') as f:
         images = f['images']
         num_imgs = images.shape[0]
         num_checked = 0
         ox_list = ['-'] * num_imgs
         idx = 0
-        ox_list_path = 'tmp_data'
         while True:
             cmd = look_and_decide(images[idx])
             if cmd == 'o' or cmd == 'x':
@@ -40,11 +39,11 @@ def main():
                 num_checked += 1
                 idx += 1
                 save(idx, ox_list, ox_list_path)
-            elif cmd == '6':
-                idx = ((idx + 1) + num_imgs) % num_imgs
-                print_state(ox_list, idx, num_checked, num_imgs)
             elif cmd == '4':
                 idx = ((idx - 1) + num_imgs) % num_imgs
+                print_state(ox_list, idx, num_checked, num_imgs)
+            elif cmd == '6':
+                idx = ((idx + 1) + num_imgs) % num_imgs
                 print_state(ox_list, idx, num_checked, num_imgs)
         look_and_decide(images[-1])
 
@@ -53,4 +52,4 @@ def main():
 
 if __name__ == '__main__':
     #unittest.main()
-    main()
+    classify('./mini_mini.h5', 'tmp_data')
