@@ -61,6 +61,11 @@ def build_ox_list(images, ox_list_path,
                       .format(num_imgs - num_checked))
             sys.exit(0)
 
+def save_good_bad_crops(images_path, goods_path, bads_path, 
+                        chunk_size):
+    pass
+
+
 def classify(src_imgs_path, ox_list_path):
     with h5py.File(src_imgs_path,'r') as f:
         if os.path.exists(ox_list_path):
