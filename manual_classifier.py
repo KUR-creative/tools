@@ -44,16 +44,17 @@ def build_ox_list(images, ox_list_path,
             print_state(ox_list, idx, num_checked, num_imgs)
             idx = mod_add(idx,+1, num_imgs)
             save(idx, num_checked, ox_list, ox_list_path)
-        elif cmd == '4':
-            idx = mod_add(idx,-1, num_imgs)
+
+        elif cmd == '4' of cmd == '6':
+            val = -1 if cmd == '4' else +1
+            idx = mod_add(idx, val, num_imgs)
             print_state(ox_list, idx, num_checked, num_imgs)
-        elif cmd == '6':
-            idx = mod_add(idx,+1, num_imgs)
-            print_state(ox_list, idx, num_checked, num_imgs)
+
         elif cmd == 'l':
             for i, ch in enumerate(ox_list):
                 print(i,ch,end='\t',flush=True)
             print()
+
         elif cmd == 'q':
             if num_checked < num_imgs:
                 print('You have to check {} more images.'\
