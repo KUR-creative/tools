@@ -4,9 +4,9 @@ def load(ox_list_path):
     with open(ox_list_path,'rb') as f:
         return _pickle.load(f)
 
-def save(now_idx, ox_list, ox_list_path):
+def save(now_idx, num_checked, ox_list, ox_list_path):
     with open(ox_list_path,'wb') as f:
-        _pickle.dump((now_idx, ox_list),f)
+        _pickle.dump((now_idx, num_checked, ox_list),f)
 
 def look_and_decide(image, window_title='o x 4 6 q'):
     while True:
@@ -28,12 +28,12 @@ def classify(src_imgs_path, ox_list_path):
     with h5py.File(src_imgs_path,'r') as f:
         images = f['images']
         num_imgs = images.shape[0]
-        num_checked = 0
         if os.path.exists(ox_list_path):
-            idx,ox_list = load(ox_list_path)
+            idx,num_checked,ox_list = load(ox_list_path)
         else:
-            ox_list = ['-'] * num_imgs
             idx = 0
+            num_checked = 0
+            ox_list = ['-'] * num_imgs
         while True:
             cmd = look_and_decide(images[idx])
             if cmd == 'o' or cmd == 'x':
@@ -41,7 +41,7 @@ def classify(src_imgs_path, ox_list_path):
                 print_state(ox_list, idx, num_checked, num_imgs)
                 num_checked += 1
                 idx += 1
-                save(idx, ox_list, ox_list_path)
+                save(idx, num_checked, ox_list, ox_list_path)
             elif cmd == '4':
                 idx = ((idx - 1) + num_imgs) % num_imgs
                 print_state(ox_list, idx, num_checked, num_imgs)
