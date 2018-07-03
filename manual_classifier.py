@@ -40,10 +40,12 @@ def classify(src_imgs_path, ox_list_path):
         while True:
             cmd = look_and_decide(images[idx])
             if cmd == 'o' or cmd == 'x':
-                ox_list[idx] = cmd
-                print_state(ox_list, idx, num_checked, num_imgs)
                 if num_checked < num_imgs:
                     num_checked += 1
+                else:
+                    print('It overwirte previous data!!!') 
+                ox_list[idx] = cmd
+                print_state(ox_list, idx, num_checked, num_imgs)
                 idx = mod_add(idx,+1, num_imgs)
                 save(idx, num_checked, ox_list, ox_list_path)
             elif cmd == '4':
