@@ -1,6 +1,26 @@
 import os, random, _pickle, cv2
-from fp import pipe, curry, cmap, cfilter, crepeat
+#from fp import pipe, curry, cmap, cfilter, crepeat
 import utils
+
+utils.help_option(
+'''
+manual_selector: 
+    select 'N' images from 'imgs_dir' 
+    and save image name and paths into 'job_records_path'.
+    'monitor_height' is maximum height size of ui
+
+if you create new job_records
+  python manual_selector N monitor_height imgs_dir job_records_path
+
+if you use existing job_records
+  python manual_selector N monitor_height job_records_path
+
+ex1. create new records)    
+python manual_selector 2 980 ./mangas/ job_records.bin
+ex2. use existing records)  
+python manual_selector 2 980 job_records.bin 
+'''
+)
 
 def load(job_records_path):
     with open(job_records_path,'rb') as f:
@@ -60,20 +80,23 @@ def look_and_decide(window_title,image,monitor_h):
 
 def select(max_selection, monitor_height,
            data_path, job_records_path=None):
+    print('?1')
     if job_records_path:
         now_idx, jobs, selected = new_job_records(data_path)
     else:
         now_idx, jobs, selected = load(data_path)
+    print('?2')
     for title, imgpaths in jobs[now_idx:]:
         print(title)
         random.shuffle(imgpaths)
         num_selection = 0
+        #print(imgpaths)
         for imgpath in imgpaths:
             img = cv2.imread(imgpath); 
             if img is not None:
                 if 'o' == look_and_decide('o x j',img,980):
                     selected.append(
-                        (imgpath, imgpath.replace('/','_'))
+                        (imgpath, imgpath.replace(os.sep,'_'))
                     )
                     num_selection += 1
             if num_selection == max_selection:
@@ -86,8 +109,21 @@ def select(max_selection, monitor_height,
             save(now_idx,jobs,selected, data_path)
 
 
+import sys
 if __name__ == '__main__':
-    select(4,980, './data/','tmp_data2')
-    select(4,980, 'tmp_data2')
-    _, _, selected = load('tmp_data2')
+    max_selection = int(sys.argv[1])
+    monitor_height = int(sys.argv[2])
+
+    if len(sys.argv) == 4+1:
+        imgs_dir = sys.argv[3]
+        job_records_path = sys.argv[4]
+        select(max_selection, monitor_height, 
+               imgs_dir, job_records_path)
+    elif len(sys.argv) == 3+1:
+        job_records_path = sys.argv[3]
+        select(max_selection, monitor_height, job_records_path)
+    else:
+        print('invalid number of arguments!')
+
+    _, _, selected = load(job_records_path)
     print(selected)
