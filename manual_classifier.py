@@ -36,8 +36,9 @@ def build_ox_list(images, ox_list_path,
         if cmd == 'o' or cmd == 'x':
             if num_checked < num_imgs and ox_list[idx] == '-':
                 num_checked += 1
-            else:
-                print('It overwirte previous data!!!') 
+            elif ox_list[idx] != cmd:
+                print('It overwirtes previous data!!!') 
+                print(ox_list[idx], '->', cmd)
             ox_list[idx] = cmd
             print_state(ox_list, idx, num_checked, num_imgs)
             idx = mod_add(idx,+1, num_imgs)
