@@ -1,7 +1,14 @@
-import cv2, h5py
+import _pickle, cv2, h5py
 
-def look_and_decide(image,
-                    window_title='o x 4 6 q'):
+def load(ox_list_path):
+    with open(ox_list_path,'rb') as f:
+        return _pickle.load(f)
+
+def save(now_idx, ox_list, ox_list_path):
+    with open(ox_list_path,'wb') as f:
+        _pickle.dump((now_idx, ox_list),f)
+
+def look_and_decide(image, window_title='o x 4 6 q'):
     while True:
         cv2.imshow(window_title,image)
         key = cv2.waitKey(1) & 0xFF
@@ -24,6 +31,7 @@ def main():
         num_checked = 0
         ox_list = ['-'] * num_imgs
         idx = 0
+        ox_list_path = 'tmp_data'
         while True:
             cmd = look_and_decide(images[idx])
             if cmd == 'o' or cmd == 'x':
@@ -31,6 +39,7 @@ def main():
                 print_state(ox_list, idx, num_checked, num_imgs)
                 num_checked += 1
                 idx += 1
+                save(idx, ox_list, ox_list_path)
             elif cmd == '6':
                 idx = (idx + 1) % num_imgs
                 print_state(ox_list, idx, num_checked, num_imgs)
