@@ -9,16 +9,22 @@ def look_and_decide(image,
             key == ord('x') or # bad crop
             key == ord('6') or # next
             key == ord('4') or # prev
-            key == ord('q')):
+            key == ord('q')):  # exit
             return chr(key)
 
 def main():
     # load
     # look_and_decide
-    with h5py.File('./mini_128x_1crop_32.h5','r') as f:
+    with h5py.File('./mini_mini.h5','r') as f:
         images = f['images']
-        for img in images:
-            print(look_and_decide(img))
+        num_imgs = images.shape[0]
+        idx = 0
+        while 0 <= idx < num_imgs:
+            print(look_and_decide(images[idx]))
+            idx += 1
+            print(idx)
+        print(idx)
+        look_and_decide(images[-1])
 
 if __name__ == '__main__':
     main()
