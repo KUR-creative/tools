@@ -1,4 +1,4 @@
-import _pickle, cv2, h5py
+import os, _pickle, cv2, h5py
 
 def load(ox_list_path):
     with open(ox_list_path,'rb') as f:
@@ -29,8 +29,11 @@ def classify(src_imgs_path, ox_list_path):
         images = f['images']
         num_imgs = images.shape[0]
         num_checked = 0
-        ox_list = ['-'] * num_imgs
-        idx = 0
+        if os.path.exists(ox_list_path):
+            idx,ox_list = load(ox_list_path)
+        else:
+            ox_list = ['-'] * num_imgs
+            idx = 0
         while True:
             cmd = look_and_decide(images[idx])
             if cmd == 'o' or cmd == 'x':
