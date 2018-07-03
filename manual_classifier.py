@@ -1,4 +1,4 @@
-import os, _pickle, cv2, h5py
+import os, sys, _pickle, cv2, h5py
 
 def load(ox_list_path):
     with open(ox_list_path,'rb') as f:
@@ -54,7 +54,10 @@ def classify(src_imgs_path, ox_list_path):
             elif cmd == '6':
                 idx = mod_add(idx,+1, num_imgs)
                 print_state(ox_list, idx, num_checked, num_imgs)
-        look_and_decide(images[-1])
+            elif cmd == 'q':
+                if num_checked < num_imgs:
+                    print('You have to check %d more images.' % num_imgs - num_checked)
+                sys.exit(0)
 
 #import unittest, numpy as np
 #class Test(unittest.TestCase):
