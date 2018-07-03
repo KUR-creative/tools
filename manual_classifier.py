@@ -22,13 +22,12 @@ def main():
         idx = 0
         while True:
             cmd = look_and_decide(images[idx])
-            print('wtf?',cmd)
             if cmd == '6':
                 idx = (idx + 1) % num_imgs
             if cmd == '4':
                 idx = ((idx - 1) + num_imgs)% num_imgs
-            print(idx)
-        print(idx)
+            print(idx,'/',num_imgs, ' | ', 
+                  num_checked,'/',num_imgs)
         look_and_decide(images[-1])
 
 #import unittest, numpy as np
