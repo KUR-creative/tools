@@ -61,8 +61,6 @@ def build_ox_list(images, ox_list_path,
             sys.exit(0)
 
 def classify(src_imgs_path, ox_list_path):
-    # load
-    # look_and_decide
     with h5py.File(src_imgs_path,'r') as f:
         if os.path.exists(ox_list_path):
             build_ox_list(f['images'], ox_list_path, 
@@ -70,9 +68,5 @@ def classify(src_imgs_path, ox_list_path):
         else:
             build_ox_list(f['images'], ox_list_path, 0, 0)
 
-#import unittest, numpy as np
-#class Test(unittest.TestCase):
-
 if __name__ == '__main__':
-    #unittest.main()
     classify('./mini_mini.h5', 'tmp_data')
