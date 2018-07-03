@@ -18,13 +18,22 @@ def main():
     with h5py.File('./mini_mini.h5','r') as f:
         images = f['images']
         num_imgs = images.shape[0]
+        num_checked = 0
         idx = 0
-        while 0 <= idx < num_imgs:
-            print(look_and_decide(images[idx]))
-            idx += 1
+        while True:
+            cmd = look_and_decide(images[idx])
+            print('wtf?',cmd)
+            if cmd == '6':
+                idx = (idx + 1) % num_imgs
+            if cmd == '4':
+                idx = ((idx - 1) + num_imgs)% num_imgs
             print(idx)
         print(idx)
         look_and_decide(images[-1])
 
+#import unittest, numpy as np
+#class Test(unittest.TestCase):
+
 if __name__ == '__main__':
+    #unittest.main()
     main()
