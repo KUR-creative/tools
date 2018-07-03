@@ -20,7 +20,7 @@ def look_and_decide(image, window_title='o x 4 6 q'):
             return chr(key)
 
 def print_state(ox_list, idx, num_checked, num_imgs):
-    print(ox_list[idx], ':', idx,'/',num_imgs, ' | ', 
+    print(ox_list[idx], ', idx:', idx,'/',num_imgs, ', checked:', 
           num_checked,'/',num_imgs)
 def classify(src_imgs_path, ox_list_path):
     # load
