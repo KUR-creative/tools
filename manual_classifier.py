@@ -41,7 +41,7 @@ def main():
                 idx += 1
                 save(idx, ox_list, ox_list_path)
             elif cmd == '6':
-                idx = (idx + 1) % num_imgs
+                idx = ((idx + 1) + num_imgs) % num_imgs
                 print_state(ox_list, idx, num_checked, num_imgs)
             elif cmd == '4':
                 idx = ((idx - 1) + num_imgs) % num_imgs
