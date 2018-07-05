@@ -4,18 +4,17 @@ import utils
 
 utils.help_option(
 '''
-manual_selector: 
-    select 'N' images from 'imgs_dir' 
-    and save image name and paths into 'job_records_path'.
-    'monitor_height' is maximum height size of ui
+manual_selector
+  select 'N' images from 'imgs_dir' 
+  and save image name and paths into 'job_records_path'.
+  'monitor_height' is maximum height size of ui
 
-if you create new job_records
+synopsis
   python manual_selector N monitor_height imgs_dir job_records_path
 
-ex1. create new records)    
-python manual_selector 2 980 ./mangas/ job_records.bin
-ex2. use existing records)  
-python manual_selector 2 980 job_records.bin 
+example
+  python manual_selector 2 980 ./mangas/ job_records.bin
+
 '''
 )
 
