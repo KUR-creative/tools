@@ -12,9 +12,6 @@ manual_selector:
 if you create new job_records
   python manual_selector N monitor_height imgs_dir job_records_path
 
-if you use existing job_records
-  python manual_selector N monitor_height job_records_path
-
 ex1. create new records)    
 python manual_selector 2 980 ./mangas/ job_records.bin
 ex2. use existing records)  
@@ -113,17 +110,13 @@ import sys
 if __name__ == '__main__':
     max_selection = int(sys.argv[1])
     monitor_height = int(sys.argv[2])
-
-    if len(sys.argv) == 4+1:
-        imgs_dir = sys.argv[3]
-        job_records_path = sys.argv[4]
-        select(max_selection, monitor_height, 
-               imgs_dir, job_records_path)
-    elif len(sys.argv) == 3+1:
-        job_records_path = sys.argv[3]
+    imgs_dir = sys.argv[3]
+    job_records_path = sys.argv[4]
+    
+    if os.path.exists(job_records_path): # if cache exists,
         select(max_selection, monitor_height, job_records_path)
     else:
-        print('invalid number of arguments!')
+        select(max_selection, monitor_height, imgs_dir, job_records_path)
 
     _, _, selected = load(job_records_path)
     print(selected)
