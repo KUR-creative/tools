@@ -74,6 +74,8 @@ def look_and_decide(window_title,image,monitor_h):
             checked = True
         if (key == ord('o') or key == ord('x')) and checked:
             return chr(key)
+        if key == ord('q'):
+            return 'q'
 
 def select(max_selection, monitor_height,
            data_path, job_records_path=None):
@@ -91,11 +93,19 @@ def select(max_selection, monitor_height,
         for imgpath in imgpaths:
             img = cv2.imread(imgpath); 
             if img is not None:
-                if 'o' == look_and_decide('o x j',img,monitor_height):
+                cmd = look_and_decide('o x j',img,monitor_height)
+                if cmd == 'o':
                     selected.append(
                         (imgpath, imgpath.replace(os.sep,'_'))
                     )
                     num_selection += 1
+                elif cmd == 'q':
+                    num_last_jobs = len(jobs) - now_idx
+                    num_last_imgs = num_last_jobs * max_selection
+                    print('You have to choose {}jobs * {}imgs = {} more images.'\
+                          .format(num_last_jobs, max_selection,
+                                  num_last_jobs * max_selection))
+                    sys.exit()
             if num_selection == max_selection:
                 break
         now_idx += 1
