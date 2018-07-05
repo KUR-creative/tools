@@ -1,4 +1,18 @@
 import os, sys, _pickle, cv2, h5py
+import utils
+utils.help_option(
+'''
+manual_classifier: 
+  classify good/bad crop from 'crops.h5'
+  and then save the result to 'ox_list'
+  
+synopsis
+  python manual_classifier crops.h5 ox_list
+
+example
+  python manual_classifier ./crops.h5 ox_list
+'''
+)
 
 def load(ox_list_path):
     with open(ox_list_path,'rb') as f:
@@ -75,4 +89,4 @@ def classify(src_imgs_path, ox_list_path):
             build_ox_list(f['images'], ox_list_path, 0, 0)
 
 if __name__ == '__main__':
-    classify('./mini_mini.h5', 'tmp_data')
+    classify(sys.argv[1], sys.argv[2])
