@@ -1,4 +1,6 @@
 mailing.py
+*
+!*.py
 *.pyc
 *.vim
 
