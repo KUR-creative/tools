@@ -94,7 +94,7 @@ def select(max_selection, monitor_height,
         for imgpath in imgpaths:
             img = cv2.imread(imgpath); 
             if img is not None:
-                if 'o' == look_and_decide('o x j',img,980):
+                if 'o' == look_and_decide('o x j',img,monitor_height):
                     selected.append(
                         (imgpath, imgpath.replace(os.sep,'_'))
                     )
