@@ -11,8 +11,7 @@ manual_selector
 
 synopsis
   python manual_selector N monitor_height imgs_dir job_records_path
-
-example
+ex)
   python manual_selector 2 980 ./mangas/ job_records.bin
 
 '''
