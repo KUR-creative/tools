@@ -1,3 +1,19 @@
+import utils
+
+utils.help_option(
+'''
+mask_maker 
+  make answer data from 'job_records' 
+  and then save them into 'answer_dir'
+  
+synopsis
+  python mask_maker.py job_records answer_dir
+
+example
+  python mask_maker.py ./job_records.bin ./answers
+'''
+)
+
 import manual_selector, textMaskMakerUI 
 import sys, cv2
 
