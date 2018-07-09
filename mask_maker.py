@@ -37,6 +37,7 @@ def main(job_records_path, answer_dir, goto=None):
         for idx,imgpath_imgname in enumerate(selected):
             if unworked_job(imgpath_imgname):
                 imgpath, imgname = imgpath_imgname[:2]
+                imgname = os.path.splitext(imgname)[0]
                 print(idx,imgname)
                 textMaskMakerUI.main(imgpath,
                                      os.path.join(answer_dir, imgname))
@@ -45,6 +46,7 @@ def main(job_records_path, answer_dir, goto=None):
     else:
         for idx,imgpath_imgname in enumerate(selected[goto:]):
             imgpath, imgname = imgpath_imgname[:2]
+            imgname = os.path.splitext(imgname)[0]
             print(idx,imgname)
             textMaskMakerUI.main(imgpath,
                                  os.path.join(answer_dir, imgname))
