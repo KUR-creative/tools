@@ -9,10 +9,14 @@ manual_selector
   and save image name and paths into 'job_records_path'.
   'monitor_height' is maximum height size of ui
 
+  if 'job_records_path' already exists,
+  continue with this, append to selected.
+
 synopsis
-  python manual_selector N monitor_height imgs_dir job_records_path
-ex)
-  python manual_selector 2 980 ./mangas/ job_records.bin
+  python manual_selector.py N monitor_height imgs_dir job_records_path
+
+example
+  python manual_selector.py 2 980 ./mangas/ job_records.bin
 
 '''
 )

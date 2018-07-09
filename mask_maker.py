@@ -7,7 +7,7 @@ mask_maker
   and then save them into 'answer_dir'
   
   if you want to start specific 'index' of job records,
-  (want to rewrite answer) pass integer as 4th argument.
+  (want to rewrite some answers) pass integer as 4th argument.
   
 synopsis
   python mask_maker.py job_records answer_dir
