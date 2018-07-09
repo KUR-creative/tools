@@ -22,7 +22,7 @@ example
 import manual_selector, textMaskMakerUI 
 import sys, os, cv2
 
-def worked_job(imgpath_imgname):
+def unworked_job(imgpath_imgname):
     return (len(imgpath_imgname) == 2)
 
 def main(job_records_path, answer_dir, goto=None):
@@ -33,18 +33,16 @@ def main(job_records_path, answer_dir, goto=None):
     except:
         pass # make it anyway!
 
-    print(goto)
     if goto is None:
         for idx,imgpath_imgname in enumerate(selected):
-            if worked_job(imgpath_imgname):
-                imgpath, imgname = imgpath_imgname
+            if unworked_job(imgpath_imgname):
+                imgpath, imgname = imgpath_imgname[:2]
                 print(idx,imgname)
                 textMaskMakerUI.main(imgpath,
                                      os.path.join(answer_dir, imgname))
                 selected[idx] = (imgpath, imgname, True)
                 manual_selector.save(now_idx, jobs, selected, job_records_path)
     else:
-        print('wtf?')
         for idx,imgpath_imgname in enumerate(selected[goto:]):
             imgpath, imgname = imgpath_imgname[:2]
             print(idx,imgname)
