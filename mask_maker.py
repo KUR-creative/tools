@@ -27,6 +27,8 @@ def unworked_job(imgpath_imgname):
 
 def main(job_records_path, answer_dir, goto=None):
     now_idx, jobs, selected = manual_selector.load(job_records_path)
+    
+    assert (0 <= goto < len(selected))
 
     try:
         os.mkdir(answer_dir)
