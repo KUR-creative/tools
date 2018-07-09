@@ -25,12 +25,14 @@ def main(job_records_path, answer_dir):
     except:
         pass # make it anyway!
 
-    for imgpath, imgname in selected:
-        print(imgname)
-        textMaskMakerUI.main(imgpath,
-                             os.path.join(answer_dir,imgname))
-        #img = cv2.imread(imgpath)
-        #cv2.imshow('img',img); cv2.waitKey(0)                
+    for idx,imgpath_imgname in enumerate(selected):
+        if len(imgpath_imgname) == 2:
+            imgpath, imgname = imgpath_imgname
+            print(idx,imgname)
+            textMaskMakerUI.main(imgpath,
+                                 os.path.join(answer_dir, imgname))
+            selected[idx] = (imgpath, imgname, True)
+            manual_selector.save(now_idx, jobs, selected, job_records_path)
   
 if __name__ == '__main__':
     main(sys.argv[1], sys.argv[2])
