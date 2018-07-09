@@ -22,8 +22,8 @@ example
 import manual_selector, textMaskMakerUI 
 import sys, os, cv2
 
-def unworked_job(imgpath_imgname):
-    return (len(imgpath_imgname) == 2)
+def is_done(imgpath_imgname):
+    return (len(imgpath_imgname) == 3)
 
 def main(job_records_path, answer_dir, goto=None):
     now_idx, jobs, selected = manual_selector.load(job_records_path)
@@ -35,18 +35,14 @@ def main(job_records_path, answer_dir, goto=None):
     except:
         pass # make it anyway!
 
-    if goto is None:
-        for idx,imgpath_imgname in enumerate(selected):
-            if unworked_job(imgpath_imgname):
-                imgpath, imgname = imgpath_imgname[:2]
-                imgname = os.path.splitext(imgname)[0]
-                print(idx,imgname)
-                textMaskMakerUI.main(imgpath,
-                                     os.path.join(answer_dir, imgname))
-                selected[idx] = (imgpath, imgname, True)
-                manual_selector.save(now_idx, jobs, selected, job_records_path)
-    else:
-        for idx,imgpath_imgname in enumerate(selected[goto:]):
+    skip_done = goto is None
+    start = 0 if skip_done else goto
+
+    for idx,imgpath_imgname in enumerate(selected[start:]):
+        idx += start
+        if skip_done and is_done(imgpath_imgname):
+            continue
+        else:
             imgpath, imgname = imgpath_imgname[:2]
             imgname = os.path.splitext(imgname)[0]
             print(idx,imgname)
