@@ -20,7 +20,7 @@ example
 )
 
 import manual_selector, textMaskMakerUI 
-import sys, os, cv2
+import sys, shutil, os, cv2
 
 def is_done(imgpath_imgname):
     return (len(imgpath_imgname) == 3)
@@ -49,6 +49,7 @@ def main(job_records_path, answer_dir, goto=None):
             print(idx,imgname)
             textMaskMakerUI.main(imgpath,
                                  os.path.join(answer_dir, imgname))
+            shutil.copyfile(imgpath,os.path.join(answer_dir, imgname))
             selected[idx] = (imgpath, imgname, True)
             manual_selector.save(now_idx, jobs, selected, job_records_path)
   
