@@ -47,7 +47,7 @@ def main(job_records_path, answer_dir, goto=None):
             imgpath, imgname = imgpath_imgname[:2]
             origin_name = imgname            
             imgname = os.path.splitext(imgname)[0]
-            #print(idx,'[2]',imgpath,'|',imgname,'|',origin_name)
+            print(idx,'[2]',imgpath,'|',imgname,'|',origin_name)
             textMaskMakerUI.main(imgpath,
                                  os.path.join(answer_dir, imgname))
             shutil.copyfile(imgpath, os.path.join(answer_dir, origin_name))
