@@ -138,10 +138,10 @@ def main(srcpath,dstpath) :
                 origin = back.copy()
                 img = origin.copy()
                 mask = maskBack.copy()
-            elif k == 113:
+            elif k == ord('q'):
                 rad = 10
                 mode = 'RECT'
-                return -1
+                return 'q'
             elif k == 114:
                 cv2.destroyAllWindows()
                 reset = True

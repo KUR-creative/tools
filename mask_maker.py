@@ -48,9 +48,10 @@ def main(job_records_path, answer_dir, goto=None):
             origin_name = imgname            
             imgname = os.path.splitext(imgname)[0]
             print(idx,'[2]',imgpath,'|',imgname,'|',origin_name)
-            textMaskMakerUI.main(imgpath,
-                                 os.path.join(answer_dir, imgname))
-            shutil.copyfile(imgpath, os.path.join(answer_dir, origin_name))
+            ret = textMaskMakerUI.main(imgpath,
+                                       os.path.join(answer_dir, imgname))
+            if ret != 'q':                           
+                shutil.copyfile(imgpath, os.path.join(answer_dir, origin_name))
             selected[idx] = (imgpath, imgname, True)
             manual_selector.save(now_idx, jobs, selected, job_records_path)
   
