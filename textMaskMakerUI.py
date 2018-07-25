@@ -21,7 +21,9 @@ mainShowArea = windowH - cover
 ix, iy = -1,-1
 drawing = False
 mode = 'RECT'
+showMask = False
 img = []
+maskedImg = []
 origin = []
 back = []
 mask = []
@@ -40,7 +42,7 @@ def textDelete(event, x,y, flags, param):
         if mode == 'RECT':
             ix = x
             iy = y
-        elif mode == 'DRAW':
+        elif mode == 'DRAW' or mode == 'MANUAL':
             maskTemp = np.zeros(mask.shape,np.uint8)
             cv2.circle(img,(x,y),rad,color,-1)
             cv2.circle(maskTemp,(x,y),rad,(0,0,255),-1)
@@ -50,7 +52,7 @@ def textDelete(event, x,y, flags, param):
             if drawing == True:
                 img = origin.copy()
                 cv2.rectangle(img,(ix,iy),(x,y),(255,0,0),1)
-        elif mode == 'DRAW':
+        elif mode == 'DRAW' or mode == 'MANUAL':
             if drawing == True:
                 cv2.circle(img,(x,y),rad,color,-1)
                 cv2.circle(maskTemp,(x,y),rad,(0,0,255),-1)
@@ -87,8 +89,13 @@ def textDelete(event, x,y, flags, param):
             origin = img.copy()
             maskTemp = cv2.bitwise_and(imgTemp,maskTemp)
             mask = cv2.add(mask,maskTemp)
+        elif mode == 'MANUAL':
+            maskBack = mask.copy()
+            back = origin.copy()
+            origin = img.copy()
+            mask = cv2.add(mask,maskTemp)
     elif event == cv2.EVENT_RBUTTONDOWN:
-        if mode == 'DRAW':
+        if mode == 'DRAW' or mode == 'MANUAL':
             color = (img[y,x]).tolist()
             print('mode DRAW  rad = '+str(rad)+" color is ",color)
 
@@ -98,7 +105,7 @@ def textDelete(event, x,y, flags, param):
 
 
 def main(srcpath,dstpath) :
-    global img, origin, back, mask, maskBack, drawing, mode, rad , color
+    global img, maskedImg, origin, back, mask, maskBack, drawing, mode, rad , color, showMask
     Image=cv2.imread(srcpath,cv2.IMREAD_COLOR)
     Mask = np.zeros(Image.shape,np.uint8)
     roiNum = 1
@@ -121,9 +128,26 @@ def main(srcpath,dstpath) :
         cv2.namedWindow('image')
         cv2.setMouseCallback('image',textDelete)
         while True:
-            cv2.imshow('image',img)
+            if showMask:
+                gmask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
+                fmask = cv2.threshold(gmask, 10, 255, cv2.THRESH_BINARY)[1]
+                bmask = cv2.bitwise_not(fmask)
+                fg = cv2.bitwise_and(mask, mask, mask=fmask)
+                bg = cv2.bitwise_and(img, img, mask=bmask)
+                maskedImg = cv2.add(fg,bg)
+                cv2.imshow('image',maskedImg)
+            else:
+                cv2.imshow('image',img)
             #cv2.imshow('mask',mask)
-            k = cv2.waitKey(1)
+            k = cv2.waitKey(1) & 0xFF
+
+            if k == ord('s'):
+                if showMask:
+                    showMask = False
+                    print("mask invisible")
+                else:
+                    showMask = True
+                    print("mask visible")
 
             if k == 27:
                 cv2.destroyAllWindows()
@@ -148,18 +172,21 @@ def main(srcpath,dstpath) :
                 rad = 10
                 mode = 'RECT'
                 break
-            elif k == 109 and drawing == False:
+            elif k == ord('m') and drawing == False:
                 if mode == 'RECT':
                     mode = 'DRAW'
                     print('mode DRAW  rad = '+str(rad)+" color is ",color )
                 elif mode == 'DRAW':
+                    mode = 'MANUAL'
+                    print('mode MANUAL  rad = '+str(rad)+" color is ",color)
+                elif mode == 'MANUAL':
                     mode = 'RECT'
                     print('mode RECT')
-            elif k == 43 and drawing == False and mode == 'DRAW':
+            elif k == 43 and drawing == False and (mode == 'DRAW' or mode == 'MANUAL'):
                 if rad < 30:
                     rad += 1
                     print('mode DRAW  rad = '+str(rad)+" color is ",color)
-            elif k == 45 and drawing == False and mode == 'DRAW':
+            elif k == 45 and drawing == False and (mode == 'DRAW' or mode == 'MANUAL'):
                 if rad > 1:
                     rad -= 1
                     print('mode DRAW  rad = '+str(rad)+" color is ",color)
@@ -177,8 +204,6 @@ def main(srcpath,dstpath) :
 
     cv2.imwrite(cleanName,Image)
     cv2.imwrite(maskName,Mask)
-
-
 
 
 if __name__ == "__main__" :
