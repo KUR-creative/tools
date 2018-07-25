@@ -3,3 +3,4 @@ mailing.py
 *.*
 !*.py
 !README
+!*.md
