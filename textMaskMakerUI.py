@@ -185,7 +185,7 @@ def main(srcpath,dstpath) :
                     print('mode RECT')
             elif k == ord('1') and drawing == False and mode != 'RECT':
                 maskColor = (0,0,255)
-                print('mask color is [RED]: Easy Font Text')
+                print('mask color is [RED]: Text on Easy Background')
             elif k == ord('2') and drawing == False and mode != 'RECT':
                 maskColor = (0,255,0)
                 print('mask color is [GREEN]: Font Text on Hard Background')
