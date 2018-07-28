@@ -45,10 +45,11 @@ def main(job_records_path, answer_dir, goto=None):
             continue
         else:
             imgpath, imgname = imgpath_imgname[:2]
+            imgpath = imgpath.replace('\\',os.sep) # in case of windows path..
             origin_name = imgname            
             imgname = os.path.splitext(imgname)[0]
             print(idx,'[2]',imgpath,'|',imgname,'|',origin_name)
-            ret = textMaskMakerUI.main(imgpath,
+            ret = textMaskMakerUI.main(imgpath, 
                                        os.path.join(answer_dir, imgname))
             if ret != 'q':                           
                 shutil.copyfile(imgpath, os.path.join(answer_dir, origin_name))
