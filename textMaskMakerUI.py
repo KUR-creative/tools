@@ -31,9 +31,10 @@ maskBack = []
 maskTemp = []
 rad = 10
 color = (255,255,255)
+maskColor = (0,0,255)
 
 def textDelete(event, x,y, flags, param):
-    global ix, iy, drawing, img, origin, back, mask, maskBack, maskTemp, mode, rad, color
+    global ix, iy, drawing, img, origin, back, mask, maskBack, maskTemp, mode, rad, color, maskColor
 
     trace = []
 
@@ -45,7 +46,7 @@ def textDelete(event, x,y, flags, param):
         elif mode == 'DRAW' or mode == 'MANUAL':
             maskTemp = np.zeros(mask.shape,np.uint8)
             cv2.circle(img,(x,y),rad,color,-1)
-            cv2.circle(maskTemp,(x,y),rad,(0,0,255),-1)
+            cv2.circle(maskTemp,(x,y),rad,maskColor,-1)
         drawing = True
     elif event == cv2.EVENT_MOUSEMOVE:
         if mode == 'RECT':
@@ -55,7 +56,7 @@ def textDelete(event, x,y, flags, param):
         elif mode == 'DRAW' or mode == 'MANUAL':
             if drawing == True:
                 cv2.circle(img,(x,y),rad,color,-1)
-                cv2.circle(maskTemp,(x,y),rad,(0,0,255),-1)
+                cv2.circle(maskTemp,(x,y),rad,maskColor,-1)
     elif event == cv2.EVENT_LBUTTONUP:
         drawing = False
 
@@ -105,7 +106,7 @@ def textDelete(event, x,y, flags, param):
 
 
 def main(srcpath,dstpath) :
-    global img, maskedImg, origin, back, mask, maskBack, drawing, mode, rad , color, showMask
+    global img, maskedImg, origin, back, mask, maskBack, drawing, mode, rad , color, showMask, maskColor
     Image=cv2.imread(srcpath,cv2.IMREAD_COLOR)
     Mask = np.zeros(Image.shape,np.uint8)
     roiNum = 1
@@ -158,7 +159,7 @@ def main(srcpath,dstpath) :
                     Image[mainShowArea*(roiNum-1):] = origin
                     Mask[mainShowArea*(roiNum-1):] = mask
                 break
-            elif k == ord('u'):
+            elif k == 26 or k == ord('u'):
                 origin = back.copy()
                 img = origin.copy()
                 mask = maskBack.copy()
@@ -182,6 +183,15 @@ def main(srcpath,dstpath) :
                 elif mode == 'MANUAL':
                     mode = 'RECT'
                     print('mode RECT')
+            elif k == ord('1') and drawing == False and mode != 'RECT':
+                maskColor = (0,0,255)
+                print('mask color is [RED]: Easy Font Text')
+            elif k == ord('2') and drawing == False and mode != 'RECT':
+                maskColor = (0,255,0)
+                print('mask color is [GREEN]: Font Text on Hard Background')
+            elif k == ord('3') and drawing == False and mode != 'RECT':
+                maskColor = (255,0,0)
+                print('mask color is [BLUE]: Sound Effect, Handwritten text')
             elif k == 43 and drawing == False and (mode == 'DRAW' or mode == 'MANUAL'):
                 if rad < 30:
                     rad += 1
@@ -204,6 +214,8 @@ def main(srcpath,dstpath) :
 
     cv2.imwrite(cleanName,Image)
     cv2.imwrite(maskName,Mask)
+
+
 
 
 if __name__ == "__main__" :
