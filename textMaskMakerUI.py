@@ -52,7 +52,7 @@ def textDelete(event, x,y, flags, param):
         if mode == 'RECT':
             if drawing == True:
                 img = origin.copy()
-                cv2.rectangle(img,(ix,iy),(x,y),(255,0,0),1)
+                cv2.rectangle(img,(ix,iy),(x,y),(255,0,0),1) # fixed mask color
         elif mode == 'DRAW' or mode == 'MANUAL':
             if drawing == True:
                 cv2.circle(img,(x,y),rad,color,-1)
@@ -177,9 +177,13 @@ def main(srcpath,dstpath) :
                 if mode == 'RECT':
                     mode = 'DRAW'
                     print('mode DRAW  rad = '+str(rad)+" color is ",color )
+                    # ---- now DRAW mode! ----
+                    maskColor = (0,0,255) # DRAW mode default color: RED
                 elif mode == 'DRAW':
                     mode = 'MANUAL'
                     print('mode MANUAL  rad = '+str(rad)+" color is ",color)
+                    # ---- now MANUAL mode! ----
+                    maskColor = (255,0,0) # MANUAL mode default color: BLUE
                 elif mode == 'MANUAL':
                     mode = 'RECT'
                     print('mode RECT')
