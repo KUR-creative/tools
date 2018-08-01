@@ -214,13 +214,14 @@ def main(srcpath,dstpath) :
                     print('mode RECT')
             elif k == ord('e') and drawing == False:
                 if mode == 'ERASE':
+                    showMask = False
                     mode = modeTmp
                     print('return to ',mode)
                 else:
-                    if showMask == True:
-                        modeTmp = mode
-                        mode = 'ERASE'
-                        print('MASK CLEAR MODE')
+                    showMask = True
+                    modeTmp = mode
+                    mode = 'ERASE'
+                    print('MASK CLEAR MODE')
             elif k == ord('1') and drawing == False and mode != 'RECT':
                 maskColor = (0,0,255)
                 print('mask color is [RED]: Text on Easy Background')
