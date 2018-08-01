@@ -231,11 +231,11 @@ def main(srcpath,dstpath) :
             elif k == ord('3') and drawing == False and mode != 'RECT':
                 maskColor = (255,0,0)
                 print('mask color is [BLUE]: Sound Effect, Handwritten text')
-            elif k == 43 and drawing == False and (mode == 'DRAW' or mode == 'MANUAL'):
+            elif k == 43 and drawing == False and (mode == 'DRAW' or mode == 'MANUAL' or mode == 'ERASE'):
                 if rad < 30:
                     rad += 1
                     print('mode DRAW  rad = '+str(rad)+" color is ",color)
-            elif k == 45 and drawing == False and (mode == 'DRAW' or mode == 'MANUAL'):
+            elif k == 45 and drawing == False and (mode == 'DRAW' or mode == 'MANUAL' or mode == 'ERASE'):
                 if rad > 1:
                     rad -= 1
                     print('mode DRAW  rad = '+str(rad)+" color is ",color)
