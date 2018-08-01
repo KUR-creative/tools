@@ -234,11 +234,11 @@ def main(srcpath,dstpath) :
             elif k == 43 and drawing == False and (mode == 'DRAW' or mode == 'MANUAL' or mode == 'ERASE'):
                 if rad < 30:
                     rad += 1
-                    print('mode DRAW  rad = '+str(rad)+" color is ",color)
+                    print('mode ', mode,' rad = '+str(rad)+" color is ",color)
             elif k == 45 and drawing == False and (mode == 'DRAW' or mode == 'MANUAL' or mode == 'ERASE'):
                 if rad > 1:
                     rad -= 1
-                    print('mode DRAW  rad = '+str(rad)+" color is ",color)
+                    print('mode ', mode,' rad = '+str(rad)+" color is ",color)
 
 
 
