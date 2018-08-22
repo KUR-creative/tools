@@ -78,15 +78,15 @@ def look_and_decide(window_title,image,monitor_h):
             return chr(key)
         if key == ord('q'):
             return 'q'
+        if key == ord('r'):
+            return 'r'
 
 def select(max_selection, monitor_height,
            data_path, job_records_path=None):
-    print('?1')
     if job_records_path:
         now_idx, jobs, selected = new_job_records(data_path)
     else:
         now_idx, jobs, selected = load(data_path)
-    print('?2')
     for title, imgpaths in jobs[now_idx:]:
         print(title)
         random.shuffle(imgpaths)
@@ -108,6 +108,9 @@ def select(max_selection, monitor_height,
                           .format(num_last_jobs, max_selection,
                                   num_last_jobs * max_selection))
                     sys.exit()
+                elif cmd == 'r':
+                    num_selection = max_selection # it means "SKIP this title"
+                    print('---> skip this title!')
             if num_selection == max_selection:
                 break
         now_idx += 1
